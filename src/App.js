@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { MacScrollbar } from 'mac-scrollbar'
-import 'mac-scrollbar/dist/mac-scrollbar.css'
 
+import { Scrollbars } from 'react-custom-scrollbars'
 import Home from './pages/Home'
 import GoodsChoose from './pages/GoodsChoose'
 import GoodsDetailPage from './pages/GoodsDetailPage'
@@ -12,7 +11,7 @@ import Cart from './pages/Cart'
 
 function App() {
   return (
-    <MacScrollbar>
+    <Scrollbars style={{ width: '100%', height: '100vh' }}>
       <Router>
         <Switch>
           <Route path="/detail/:id" component={GoodsDetailPage} />
@@ -30,7 +29,7 @@ function App() {
           <Route path="/" component={Home} />
         </Switch>
       </Router>
-    </MacScrollbar>
+    </Scrollbars>
   )
 }
 
