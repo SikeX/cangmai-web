@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import { FILE_BASE_URL } from '../services/api'
-import donationItem from '../services/donationItem'
+import goods from '../services/goods'
 
 function SliderItem({ url }) {
   // const color = 'bg-red-' + name + '00'
 
-  const headStyle = 'w-full mx-auto h-80 md:h-96 text-white text-2xl'
+  const headStyle = 'w-full mx-auto h-96 text-white rounded-md text-2xl'
 
   const imgUrl = FILE_BASE_URL + url.split(',')[0]
 
@@ -17,8 +17,8 @@ function SliderItem({ url }) {
   }
 
   return (
-    <div className={headStyle} style={heightStyle}>
-      <img src={imgUrl} alt="banner" />
+    <div className={headStyle}>
+      <img className="w-full h-full object-cover" src={imgUrl} alt="banner" />
     </div>
   )
 }
@@ -27,7 +27,7 @@ function HeadSlider() {
   const [headImg, setHeadImg] = useState([])
 
   useEffect(() => {
-    donationItem.getAllItem().then((res) => {
+    goods.getAllPromotion().then((res) => {
       if (res.success) {
         console.log(res.result.records)
         setHeadImg(res.result.records)
@@ -67,9 +67,11 @@ function HeadSlider() {
       transitionDuration={500}
       removeArrowOnDeviceType={['tablet', 'mobile', 'desktop']}
     >
-      <div className="bg-blue-500 h-80 rounded-lg">1</div>
-      <div className="bg-red-500 h-80 rounded-lg">2</div>
-      {/* {headImg.map((item) => <SliderItem url={item.picture} />)} */}
+      {/* <div className="bg-blue-500 h-80 rounded-lg">1</div>
+      <div className="bg-red-500 h-80 rounded-lg">2</div> */}
+      {headImg.map((item) => (
+        <SliderItem key={item.id} url={item.img} />
+      ))}
     </Carousel>
   )
 }

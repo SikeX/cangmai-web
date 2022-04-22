@@ -7,12 +7,12 @@ import Nav from '../components/Nav'
 import MultipleSlider from '../components/MultipleSlider'
 import Footer from '../components/Footer'
 import DonateChooseTool from '../components/DonateChooseTool'
-import donationItem from '../services/donationItem'
-import DonateItem from '../components/DonateItem'
+import goods from '../services/goods'
+import GoodsItem from '../components/GoodsItem'
 import { MyContext } from '../context-manager'
-import donationClass from '../services/donationClass'
+import category from '../services/category'
 
-function DonateChoose() {
+function GoodsChoose(props) {
   const [allItem, setAllItem] = useState([])
 
   const [total, setTotal] = useState(0)
@@ -21,11 +21,18 @@ function DonateChoose() {
 
   const [allClass, setAllClass] = useState()
 
+  const { id } = props.match.params
+
   // console.log(allClass)
 
   useEffect(() => {
     const loadData = async () => {
-      donationItem.getAllItem(params).then((res) => {
+      let params = {
+        typeId: id,
+        pageNo: 1,
+        pageSize: 10,
+      }
+      goods.getGoodssByTypeId(params).then((res) => {
         if (res.success) {
           setTotal(res.result.total)
           setAllItem(res.result.records)
@@ -36,7 +43,7 @@ function DonateChoose() {
   }, [params])
 
   useEffect(() => {
-    donationClass.getAllClass().then((res) => {
+    category.getAllCategory().then((res) => {
       if (res.success) {
         const classMap = {}
         // eslint-disable-next-line array-callback-return
@@ -54,13 +61,13 @@ function DonateChoose() {
     setParams({ ...params, ...newParam })
   }
 
-  const paramMap = {
-    category: {
-      校级: 1,
-      院级: 2,
-    },
-    donationClass: allClass,
-  }
+  // const paramMap = {
+  //   category: {
+  //     校级: 1,
+  //     院级: 2,
+  //   },
+  //   donationClass: allClass,
+  // }
 
   const changePage = (page) => {
     getParams({ page })
@@ -68,26 +75,20 @@ function DonateChoose() {
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <MyContext.Provider value={{
-      setParams, getParams, paramMap, allClass,
-    }}
-    >
+    <MyContext.Provider>
       <div className="w-full">
         <Head />
         <Nav />
-        <DonateChooseTool getParams={getParams} />
+        {/* <DonateChooseTool getParams={getParams} /> */}
         {total ? (
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-1 md:px-16 my-3">
             {allItem.map((item) => (
-              <DonateItem
+              <GoodsItem
                 key={item.id}
                 id={item.id}
                 title={item.name}
-                picture={item.picture}
-                targetMoney={item.targetMoney}
-                raisedMoney={item.raisedMoney}
-                itemDesc={item.itemDesc}
-                leastMoney={item.leastMoney}
+                picture={item.mainImg}
+                itemDesc={item.subTitle}
                 tag={false}
               />
             ))}
@@ -101,7 +102,12 @@ function DonateChoose() {
         )}
         <div className="flex mx-auto py-8 px-4">
           <div />
-          <Pagination onChange={(event, page) => getParams({ pageNo: page })} sx={{ margin: 'auto' }} count={Math.ceil(total / 12)} color="primary" />
+          <Pagination
+            onChange={(event, page) => getParams({ pageNo: page })}
+            sx={{ margin: 'auto' }}
+            count={Math.ceil(total / 12)}
+            color="primary"
+          />
         </div>
         <Footer />
       </div>
@@ -109,4 +115,4 @@ function DonateChoose() {
   )
 }
 
-export default DonateChoose
+export default GoodsChoose

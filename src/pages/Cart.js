@@ -1,9 +1,9 @@
-import DonateStatus from '../components/DonateStatus'
-import Footer from '../components/Footer'
+import { React, useEffect, useState } from 'react'
 import Head from '../components/Head'
 import Nav from '../components/Nav'
+import Footer from '../components/Footer'
 
-function DonateDetail(props) {
+function Cart(props) {
   // eslint-disable-next-line react/destructuring-assignment
   const { id } = props.match.params
 
@@ -11,10 +11,9 @@ function DonateDetail(props) {
     <div className="w-full flex flex-col">
       <Head />
       <Nav />
-      <DonateStatus id={id} />
       <Footer />
     </div>
   )
 }
 
-export default DonateDetail
+export default Cart

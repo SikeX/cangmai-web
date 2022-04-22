@@ -4,30 +4,18 @@ import Nav from '../components/Nav'
 import HeadSlider from '../components/HeadSlider'
 import Footer from '../components/Footer'
 import DonateClass from '../components/DonateClass'
-import donationClass from '../services/donationClass'
+import category from '../services/category'
 import Categories from '../components/Categories'
 import NewMember from '../components/NewMenber'
 import UserLogin from '../components/UserLogin'
 
 function Home() {
-  const [donationClassList, setDonationClassList] = useState([])
-
-  useEffect(() => {
-    donationClass.getAllClass().then((res) => {
-      console.log(res)
-      if (res.success) {
-        setDonationClassList(res.result.records)
-      }
-    })
-  }, [])
-
   return (
-    <div className="flex w-screen flex-col">
-      <Head />
-      <div className="flex flex-col-reverse lg:flex-col">
-        <Nav />
-      </div>
-      <div className="w-full h-99 bg-gray-100 flex px-8 md:px-20 space-x-2">
+    <div className="flex w-screen flex-col bg-gray-100">
+      {/* <div className="w-full h-6 bg-green-300 my-auto">注册</div> */}
+      {/* <Head /> */}
+      <Nav />
+      <div className="w-full h-99 flex px-8 md:px-20 space-x-2">
         <div className="w-1/5 bg-blue-100 p-2">
           <Categories />
         </div>
@@ -40,11 +28,17 @@ function Home() {
             <div className="h-2/5">
               <UserLogin />
             </div>
-            <div className="h-3/5 bg-gray-200">活动</div>
+            <div className="h-3/5 bg-gray-200">
+              <img
+                className="w-full h-full object-cover"
+                src="https://s3.bmp.ovh/imgs/2022/04/21/4a70f63a04cce711.png"
+                alt="aaa"
+              />
+            </div>
           </div>
         </div>
       </div>
-      <div className="w-full bg-red-300 h-40">top ranking</div>
+
       {/* <div className="w-full flex flex-col px-1 md:px-12 lg:px-16 space-y-3 py-1">
         {donationClassList.map((item) => <DonateClass key={item.id} id={item.id} name={item.name} />)}
       </div> */}

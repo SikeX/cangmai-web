@@ -1,5 +1,5 @@
 import Carousel from 'react-grid-carousel'
-import DonateItem from './DonateItem'
+import GoodsItem from './GoodsItem'
 
 function MultipleSlider() {
   const settings = {
@@ -14,38 +14,36 @@ function MultipleSlider() {
       cols={4}
       rows={1}
       gap={10}
-      responsiveLayout={
-        [
-          {
-            breakpoint: 768,
-            cols: 1,
-            rows: 4,
-          }
-        ]
-      }
+      responsiveLayout={[
+        {
+          breakpoint: 768,
+          cols: 1,
+          rows: 4,
+        },
+      ]}
       mobileBreakpoint={300}
       loop
     >
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
       <Carousel.Item>
-        <DonateItem tag={false} title="1" />
+        <GoodsItem tag={false} title="1" />
       </Carousel.Item>
     </Carousel>
   )

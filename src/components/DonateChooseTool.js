@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { MyContext } from '../context-manager'
-import donationClass from '../services/donationClass'
+import category from '../services/category'
 
 function ClsItem({ label, title, paramState, getFocusComp }) {
   const { setParams, getParams, paramMap } = useContext(MyContext)
@@ -117,7 +117,7 @@ function DonateChooseTool() {
   }
 
   useEffect(() => {
-    donationClass.getAllClass().then((res) => {
+    category.getAllCategory.then((res) => {
       if (res.success) {
         // res.result.records.map((item) => {
         //     item['focus'] = false

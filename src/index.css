@@ -3,32 +3,45 @@
 @tailwind utilities;
 
 #thank {
-    animation: 20s wordsloop linear infinite normal;
+  animation: 20s wordsloop linear infinite normal;
 }
 
 #thank:hover {
-    animation-play-state: paused
+  animation-play-state: paused;
 }
 
 .menu:hover .menuItem {
-    display: block;
+  display: block;
 }
 
 @keyframes wordsloop {
-    0% {
-        transform: translateX(100%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .donation-option input:checked + label {
-    color: blue;
-    border-color: rgba(59, 130, 246,1)
+  color: blue;
+  border-color: rgba(59, 130, 246, 1);
 }
 
 .donation-option input:not(:checked) + label {
-    --bg-opacity: 0;
-    box-shadow: none;
+  --bg-opacity: 0;
+  box-shadow: none;
+}
+
+.inline-text-justify {
+  text-align: justify;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+}
+
+.inline-text-justify:after {
+  display: inline-block;
+  width: 100%;
+  content: '';
 }
