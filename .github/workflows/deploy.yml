@@ -25,14 +25,14 @@ jobs:
       - name: yarn build
         run: yarn build
       - name: deploy
-        uses: cross-the-world/scp-pipelines@master
+        uses: easingthemes/ssh-deploy@v2.2.11
         env:
           WECLCOME: 'ssh scp ssh pipelines'
           LASTSSH: 'Doing somrthing after copying'
         with:
-          host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          connect-timeout: 10s
-          local: ./build/*
-          remote: /etc/cangmai/cangmai-web
+          SOURCE: ./build/*
+          TARGET: /etc/cangmai/cangmai-web
