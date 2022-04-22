@@ -11,6 +11,10 @@ function Cart(props) {
     <div className="w-full flex flex-col">
       <Head />
       <Nav />
+      <div className="w-full flex px-16">
+        <div className="w-2/3">left</div>
+        <div className="w-1/3">right</div>
+      </div>
       <Footer />
     </div>
   )
