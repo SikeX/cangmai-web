@@ -5,13 +5,12 @@ name: Deploy project to remote
 
 on:
   push:
-    branches: [ dev ]
+    branches: [dev]
   pull_request:
-    branches: [ dev ]
+    branches: [dev]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,12 +19,20 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: yarn install
+        run: yarn install
+      - name: yarn build
+        run: yarn build
+      - name: deploy
+        uses: cross-the-world/scp-pipelines@master
+        env:
+          WECLCOME: 'ssh scp ssh pipelines'
+          LASTSSH: 'Doing somrthing after copying'
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          user: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          connect-timeout: 10s
+          local: ./build/*
+          remote: /etc/cangmai/cangmai-web
