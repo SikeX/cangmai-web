@@ -34,19 +34,34 @@ const getSizeById = async (id) => {
   return result.data
 }
 
-const postTaskList = async (task) => {
-  const result = axios.post(`${baseUrl}/Tasks`, task)
-  return result
-}
-
-const addComment = async (comment) => {
-  const result = axios.post(`${baseUrl}online/goodsComment/add`, comment)
+const addCart = async (cart) => {
+  const result = await axios.post(`${baseUrl}/user/cart/add`, cart)
   return result.data
 }
 
-const deleteTodo = async (taskName, todoName) => {
-  const result = axios.delete(`${baseUrl}/Tasks/${taskName}`, { data: { name: todoName } })
-  return result
+const addComment = async (comment) => {
+  const result = await axios.post(`${baseUrl}user/goodsComment/add`, comment)
+  return result.data
+}
+
+const getCartList = async (userId) => {
+  const result = await axios.get(`${baseUrl}/user/cart/listByUserId`, { params: { userId: userId } })
+  return result.data
+}
+
+const deleteCart = async (cartId) => {
+  const result = await axios.delete(`${baseUrl}user/cart/delete`, { params: { id: cartId } })
+  return result.data
+}
+
+const changeCart = async (cart) => {
+  const result = await axios.put(`${baseUrl}user/cart/edit`, cart)
+  return result.data
+}
+
+const getCartListByIds = async (cartIds) => {
+  const result = await axios.get(`${baseUrl}user/cart/listByIds`, { params: { ids: cartIds } })
+  return result.data
 }
 
 export default {
@@ -57,4 +72,9 @@ export default {
   getSizeById,
   addComment,
   getAllPromotion,
+  getCartList,
+  addCart,
+  deleteCart,
+  changeCart,
+  getCartListByIds,
 }

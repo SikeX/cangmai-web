@@ -12,6 +12,10 @@ function Nav() {
     history.push('/')
   }
 
+  const toCart = () => {
+    history.push(`/cart/${JSON.parse(localStorage.getItem('userInfo')).id}`)
+  }
+
   return (
     <div className="flex shadow-sm w-full px-10 py-6 my-3 bg-white">
       <div className="block text-gray-600 text-4xl font-bold px-6 my-auto cursor-pointer" onClick={toHome}>
@@ -33,7 +37,7 @@ function Nav() {
           </button>
         </div>
       </form>
-      <div className="my-auto px-2 hover:text-gray-600 cursor-pointer">
+      <div className="my-auto px-2 hover:text-gray-600 cursor-pointer" onClick={toCart}>
         <FiShoppingCart size={40} />
       </div>
 

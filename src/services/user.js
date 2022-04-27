@@ -4,22 +4,22 @@ import { BASE_URL } from './api'
 const baseUrl = BASE_URL
 
 const register = async (userInfo) => {
-  const result = await axios.post(`${baseUrl}online/user/register`, userInfo)
+  const result = await axios.post(`${baseUrl}user/user/register`, userInfo)
   return result.data
 }
 
 const login = async (userInfo) => {
-  const result = await axios.post(`${baseUrl}online/login`, userInfo)
+  const result = await axios.post(`${baseUrl}user/login`, userInfo)
   return result.data
 }
 
 const addAddress = async (address) => {
-  const result = await axios.post(`${baseUrl}online/address/add`, address)
+  const result = await axios.post(`${baseUrl}user/address/add`, address)
   return result.data
 }
 
 const queryByUserId = async (userId) => {
-  const result = await axios.get(`${baseUrl}online/address/queryByUserId`, { params: { userId: userId } })
+  const result = await axios.get(`${baseUrl}user/address/queryByUserId`, { params: { userId: userId } })
   return result.data
 }
 

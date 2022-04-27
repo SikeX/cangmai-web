@@ -8,13 +8,10 @@ import { FILE_BASE_URL } from '../services/api'
 import TabPanel from './UI/TabPanel'
 import goods from '../services/goods'
 import promotion from '../services/promotion'
-import DialogTitle from '@mui/material/DialogTitle'
-import Dialog from '@mui/material/Dialog'
 import { TextField, Autocomplete } from '@mui/material'
-import user from '../services/user'
-import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
 import { FcPlus, FcMinus } from 'react-icons/fc'
+import LoginModal from './LoginModal'
+import toast, { Toaster } from 'react-hot-toast'
 
 // const Alert = React.forwardRef((props, ref) => {
 //   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -24,14 +21,14 @@ function Item({ name }) {
   return <div className="px-4 py-3 hover:bg-gray-400 cursor-pointer text-xl font-bold">{name}</div>
 }
 
-function Option({ lable, value, getOption }) {
+function Option({ lable, value, getOption, name }) {
   // const isChecked = name
 
   return (
     <div className="donation-option">
       <input
         type="radio"
-        name="option"
+        name={name}
         id={lable}
         value={value}
         onChange={(e) => {
@@ -58,13 +55,12 @@ function GoodsDetail({ id }) {
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
   const [logionModalOpen, setLogionModalOpen] = useState(false)
-  const [isRegister, setIsRegister] = useState(false)
-  const [registerUserInfo, setRegisterUserInfo] = useState({})
-  const [userInfo, setUserInfo] = useState({})
-  const [snackOpen, setSnackOpen] = useState(false)
   const [number, setNumber] = useState(1)
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
 
   let history = useHistory()
+
+  console.log(logionModalOpen)
 
   useEffect(() => {
     goods.getItemById(id).then((res) => {
@@ -72,7 +68,7 @@ function GoodsDetail({ id }) {
         setItemDetail(res.result)
       }
     })
-  }, [])
+  }, [id])
 
   useEffect(() => {
     promotion.getPromotions(itemDetail.promotionid).then((res) => {
@@ -89,7 +85,7 @@ function GoodsDetail({ id }) {
         setColorList(res.result)
       }
     })
-  }, [])
+  }, [id])
 
   useEffect(() => {
     goods.getSizeById(id).then((res) => {
@@ -98,7 +94,7 @@ function GoodsDetail({ id }) {
         setSizeList(res.result)
       }
     })
-  }, [])
+  }, [id])
 
   const getSizeOption = (e) => {
     console.log(e.target.value)
@@ -112,27 +108,9 @@ function GoodsDetail({ id }) {
 
   const [value, setValue] = useState(0)
 
-  const handleNameChange = (event) => {
-    console.log(event)
-    if (isRegister) {
-      setRegisterUserInfo({ ...registerUserInfo, username: event.target.value })
-    } else {
-      setUserInfo({ ...userInfo, username: event.target.value })
-    }
-  }
-
-  const handlePasswordChange = (event) => {
-    console.log(event)
-    if (isRegister) {
-      setRegisterUserInfo({ ...registerUserInfo, password: event.target.value })
-    } else {
-      setUserInfo({ ...userInfo, password: event.target.value })
-    }
-  }
-
   const buyNow = () => {
     if (localStorage.getItem('userInfo') === null) {
-      setLogionModalOpen(true)
+      setLoginModalOpen(true)
     } else {
       history.push({
         pathname: `/info/${id}/${selectedColor}/${selectedSize}/${number}`,
@@ -141,106 +119,40 @@ function GoodsDetail({ id }) {
     }
   }
 
-  const handleRegister = () => {
-    console.log(registerUserInfo)
-    user.register(registerUserInfo).then((res) => {
-      console.log(res)
-      if (res.success) {
-        setSnackOpen(true)
-        setIsRegister(false)
-      }
-    })
-  }
-
-  const handleLogin = () => {
-    console.log(userInfo)
-    user.login(userInfo).then((res) => {
-      console.log(res)
-      if (res.success) {
-        setSnackOpen(true)
-        setIsRegister(false)
-        setLogionModalOpen(false)
-        localStorage.setItem('userInfo', JSON.stringify(res.result.userInfo))
-      }
-    })
-  }
-
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
-  const { vertical, horizontal } = { vertical: 'top', horizontal: 'center' }
+  const closeLoginModal = () => {
+    setLoginModalOpen(false)
+  }
+
+  const toCart = () => {
+    if (selectedColor === '' || selectedSize === '') {
+      toast.error('请选择颜色和尺寸')
+      return
+    }
+    const cart = {
+      userId: JSON.parse(localStorage.getItem('userInfo')).id,
+      goodsId: id,
+      number: number,
+      colorId: selectedColor,
+      sizeId: selectedSize,
+    }
+    goods.addCart(cart).then((res) => {
+      if (res.success) {
+        toast.success('加入购物车成功')
+      } else {
+        toast.error(res.message)
+      }
+    })
+    // history.push(`/cart/${id}`)
+  }
 
   return (
     <div className="w-full flex flex-col">
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={snackOpen}
-        onClose={() => setSnackOpen(false)}
-        autoHideDuration={1000}
-        key={vertical + horizontal}
-      >
-        <Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: '100%' }}>
-          {isRegister ? '注册成功' : '登录成功'}
-        </Alert>
-      </Snackbar>
-      <Dialog fullWidth={true} open={logionModalOpen} onClose={() => setLogionModalOpen(false)}>
-        <DialogTitle>{isRegister ? '用户注册' : '用户登录'}</DialogTitle>
-        <div className="flex flex-col px-4 py-4 space-y-4">
-          <TextField
-            id="name"
-            name="name"
-            type="name"
-            // fullWidth
-            required
-            label="用户名"
-            // value={values.phone}
-            onChange={handleNameChange}
-            // error={touched.phone && Boolean(errors.phone)}
-            // helperText={touched.phone && errors.phone}
-          />
-          <TextField
-            name="password"
-            type="password"
-            label="密码"
-            required
-            // fullWidth
-            // value={values.email}
-            onChange={handlePasswordChange}
-            // error={touched.email && Boolean(errors.email)}
-            // helperText={touched.email && errors.email}
-          />
-          <div className="flex space-x-2">
-            {isRegister ? (
-              <button type="submit" className="bg-black text-white px-4 py-2 cursor-pointer" onClick={handleRegister}>
-                立即注册
-              </button>
-            ) : (
-              <button type="submit" className="bg-black text-white px-4 py-2 cursor-pointer" onClick={handleLogin}>
-                立即登录
-              </button>
-            )}
-
-            {!isRegister && (
-              <a
-                className="text-sm text-blue-500 hover:underline mt-auto cursor-pointer"
-                onClick={() => setIsRegister(true)}
-              >
-                还没有账号?，立即注册
-              </a>
-            )}
-            {isRegister && (
-              <a
-                className="text-sm text-blue-500 hover:underline mt-auto cursor-pointer"
-                onClick={() => setIsRegister(false)}
-              >
-                已有账号?，立即登录
-              </a>
-            )}
-          </div>
-        </div>
-      </Dialog>
-
+      <Toaster />
+      <LoginModal isOpen={loginModalOpen} onClose={closeLoginModal} />
       <div className="w-full py-8 md:px-24 flex flex-col md:flex-row">
         <div
           style={{ backgroundImage: `url(${FILE_BASE_URL}${itemDetail.mainImg})`, height: '420px' }}
@@ -278,13 +190,13 @@ function GoodsDetail({ id }) {
           <div className="flex space-x-4 px-2">
             <div className="inline-text-justify w-12 mb-auto text-justify text-gray-500 text-sm">尺寸</div>
             {sizeList.map((item) => (
-              <Option key={item.id} lable={item.size} value={item.size} getOption={getSizeOption} />
+              <Option key={item.id} name="size" lable={item.size} value={item.size} getOption={getSizeOption} />
             ))}
           </div>
           <div className="flex space-x-4 px-2">
             <div className="inline-text-justify w-12 mb-auto text-justify text-gray-500 text-sm">颜色</div>
             {colorList.map((item) => (
-              <Option key={item.id} lable={item.color} value={item.color} getOption={getColorOption} />
+              <Option key={item.id} name="color" lable={item.color} value={item.color} getOption={getColorOption} />
             ))}
           </div>
           <div className="flex space-x-4 px-2">
@@ -313,7 +225,9 @@ function GoodsDetail({ id }) {
             <div className="px-10 py-4 bg-red-500 text-white hover:bg-red-400 cursor-pointer" onClick={buyNow}>
               立即购买
             </div>
-            <div className="px-10 py-4 bg-black text-white hover:bg-gray-600 cursor-pointer">加入购物车</div>
+            <div className="px-10 py-4 bg-black text-white hover:bg-gray-600 cursor-pointer" onClick={toCart}>
+              加入购物车
+            </div>
           </div>
         </div>
       </div>

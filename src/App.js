@@ -8,6 +8,8 @@ import Info from './pages/Info'
 import Order from './pages/Order'
 import PayDone from './pages/PayDone'
 import Cart from './pages/Cart'
+import Other from './pages/Other'
+import CartBuy from './pages/CartBuy'
 
 function App() {
   return (
@@ -23,10 +25,12 @@ function App() {
           <Route path="/payDone" component={PayDone} />
 
           <Route path="/cart/:id" component={Cart} />
+          <Route path="/cartBuy/:ids" component={CartBuy} />
 
           <Route path="/donate/:id" component={GoodsChoose} />
-
           <Route path="/" component={Home} />
+
+          <Route component={Other} />
         </Switch>
       </Router>
     </Scrollbars>

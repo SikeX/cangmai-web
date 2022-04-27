@@ -5,12 +5,12 @@ import qs from 'qs'
 const baseUrl = BASE_URL
 
 const postOrder = async (orderInfo) => {
-  const result = await axios.post(`${baseUrl}/online/orders/add`, orderInfo)
+  const result = await axios.post(`${baseUrl}/user/orders/add`, orderInfo)
   return result.data
 }
 
 const queryByOrderId = async (orderId) => {
-  const result = await axios.get(`${baseUrl}/online/orders/queryByOrderId`, { params: { orderId: orderId } })
+  const result = await axios.get(`${baseUrl}/user/orders/queryByOrderId`, { params: { orderId: orderId } })
   return result.data
 }
 
@@ -22,7 +22,7 @@ const postAlipay = async (orderInfo) => {
 }
 
 const queryByUserId = async (userId) => {
-  const result = await axios.get(`${baseUrl}/online/orders/queryByUserId`, { params: { userId: userId } })
+  const result = await axios.get(`${baseUrl}/user/orders/queryByUserId`, { params: { userId: userId } })
   return result.data
 }
 
