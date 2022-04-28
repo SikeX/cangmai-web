@@ -9,8 +9,13 @@ const postOrder = async (orderInfo) => {
   return result.data
 }
 
+const updateOrder = async (orderInfo) => {
+  const result = await axios.post(`${baseUrl}/user/orders/edit`, orderInfo)
+  return result.data
+}
+
 const queryByOrderId = async (orderId) => {
-  const result = await axios.get(`${baseUrl}/user/orders/queryByOrderId`, { params: { orderId: orderId } })
+  const result = await axios.get(`${baseUrl}user/orders/queryByOrderId`, { params: { orderId: orderId } })
   return result.data
 }
 
@@ -22,7 +27,7 @@ const postAlipay = async (orderInfo) => {
 }
 
 const queryByUserId = async (userId) => {
-  const result = await axios.get(`${baseUrl}/user/orders/queryByUserId`, { params: { userId: userId } })
+  const result = await axios.get(`${baseUrl}user/orders/queryByUserId`, { params: { userId: userId } })
   return result.data
 }
 
@@ -31,4 +36,5 @@ export default {
   queryByOrderId,
   postAlipay,
   queryByUserId,
+  updateOrder,
 }

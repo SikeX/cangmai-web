@@ -2,8 +2,10 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import { TextField, Autocomplete } from '@mui/material'
 import { useEffect, useState } from 'react'
-import GlobalAlert from './GlobalAlert'
+// import GlobalAlert from './GlobalAlert'
 import user from '../services/user'
+import toast, { Toaster } from 'react-hot-toast'
+import * as yup from 'yup'
 
 const LoginModal = (props) => {
   console.log('LoginModal.props', props)
@@ -15,8 +17,16 @@ const LoginModal = (props) => {
   const [userInfo, setUserInfo] = useState({})
   const [registerUserInfo, setRegisterUserInfo] = useState({})
   const [isRegister, setIsRegister] = useState(false)
-  const [alertMsg, setAlertMsg] = useState('')
-  const [snackOpen, setSnackOpen] = useState(false)
+  // const [alertMsg, setAlertMsg] = useState('')
+  // const [snackOpen, setSnackOpen] = useState(false)
+
+  const validationSchema = yup.object({
+    name: yup.string('请输入您的姓名').required('请输入您的姓名'),
+    phone: yup.string().matches(phoneRegExp, '手机号不可用').required('请输入您的手机号'),
+    email: yup.string('请输入您的邮箱').email('请输入有效的邮箱').required('请输入您的邮箱'),
+    // department: yup
+    //   .string('请选择您的院系/部门'),
+  })
 
   const handleNameChange = (event) => {
     console.log(event)
@@ -39,9 +49,9 @@ const LoginModal = (props) => {
     user.register(registerUserInfo).then((res) => {
       if (res.success) {
         setIsRegister(false)
-        message('注册成功')
+        toast.success('注册成功')
       } else {
-        message('注册失敗')
+        toast.error('注册失败')
       }
     })
   }
@@ -52,23 +62,19 @@ const LoginModal = (props) => {
       console.log(res)
       if (res.success) {
         setIsRegister(false)
-        onClose()
         localStorage.setItem('userInfo', JSON.stringify(res.result.userInfo))
-        message('登录成功')
+        toast.success('登录成功')
+        onClose()
       } else {
-        message(res.message)
+        toast.error(res.message)
       }
     })
   }
 
-  const message = (msg) => {
-    setAlertMsg(msg)
-    setSnackOpen(true)
-  }
-
   return (
     <Dialog fullWidth={true} open={isOpen} onClose={() => onClose()}>
-      <GlobalAlert message={alertMsg} isOpen={snackOpen} onClose={() => setSnackOpen(false)} />
+      <Toaster />
+      {/* <GlobalAlert message={alertMsg} isOpen={snackOpen} onClose={() => setSnackOpen(false)} /> */}
       <DialogTitle>{isRegister ? '用户注册' : '用户登录'}</DialogTitle>
       <div className="flex flex-col px-4 py-4 space-y-4">
         <TextField

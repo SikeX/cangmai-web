@@ -4,7 +4,7 @@ import { AiFillStar } from 'react-icons/ai'
 import { FILE_BASE_URL } from '../services/api'
 
 function GoodsItem(props) {
-  const { id, itemDesc, tag = true, title, picture } = props
+  const { id, itemDesc, tag = true, title, picture, price } = props
 
   let history = useHistory()
 
@@ -21,6 +21,7 @@ function GoodsItem(props) {
   const test = tag ? `${defaultStyle} lg:w-1/4` : defaultStyle
 
   const showDetail = (name) => {
+    console.log(id)
     history.push({ pathname: `/detail/${id}`, params: { id } })
   }
 
@@ -45,7 +46,7 @@ function GoodsItem(props) {
           </div> */}
           <div className="flex font-bold">
             <div className="my-auto text-sm">￥</div>
-            <div className="mt-auto text-2xl text-red-600 font-semibold ">9.98</div>
+            <div className="mt-auto text-2xl text-red-600 font-semibold ">{price}</div>
           </div>
 
           <div className="py-1 font-bold">{title}</div>
@@ -56,7 +57,7 @@ function GoodsItem(props) {
             {itemDesc}
           </div>
           <div className="bg-black text-white px-3 py-2 shadow-sm rounded-xl cursor-pointer text-center hover:bg-gray-200 hover:text-black my-2">
-            <div className="mx-auto" onClick={toCart}>
+            <div className="mx-auto" onClick={showDetail}>
               加入购物车
             </div>
           </div>

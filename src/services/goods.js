@@ -44,6 +44,11 @@ const addComment = async (comment) => {
   return result.data
 }
 
+const listCommentByGoodsId = async (goodsId) => {
+  const result = await axios.get(`${baseUrl}user/goodsComment/listByGoodsId`, { params: { goodsId: goodsId } })
+  return result.data
+}
+
 const getCartList = async (userId) => {
   const result = await axios.get(`${baseUrl}/user/cart/listByUserId`, { params: { userId: userId } })
   return result.data
@@ -77,4 +82,5 @@ export default {
   deleteCart,
   changeCart,
   getCartListByIds,
+  listCommentByGoodsId,
 }

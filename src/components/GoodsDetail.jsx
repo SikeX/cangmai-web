@@ -57,6 +57,7 @@ function GoodsDetail({ id }) {
   const [logionModalOpen, setLogionModalOpen] = useState(false)
   const [number, setNumber] = useState(1)
   const [loginModalOpen, setLoginModalOpen] = useState(false)
+  const [commentList, setCommentList] = useState([])
 
   let history = useHistory()
 
@@ -92,6 +93,15 @@ function GoodsDetail({ id }) {
       if (res.success) {
         console.log(res)
         setSizeList(res.result)
+      }
+    })
+  }, [id])
+
+  useEffect(() => {
+    goods.listCommentByGoodsId(id).then((res) => {
+      if (res.success) {
+        // console.log(res)
+        setCommentList(res.result.records)
       }
     })
   }, [id])
@@ -251,7 +261,14 @@ function GoodsDetail({ id }) {
               <div dangerouslySetInnerHTML={{ __html: itemDetail.detail }} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <div dangerouslySetInnerHTML={{ __html: itemDetail.story }} />
+              <div className="flex flex-col">
+                {commentList.map((item) => (
+                  <div key={item.id} className="flex flex-col space-y-2">
+                    <div>{item.userId_dictText}</div>
+                    <div>{item.detail}</div>
+                  </div>
+                ))}
+              </div>
             </TabPanel>
             <TabPanel value={value} index={2}>
               <div dangerouslySetInnerHTML={{ __html: itemDetail.question }} />

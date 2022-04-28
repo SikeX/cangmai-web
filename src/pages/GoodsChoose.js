@@ -89,6 +89,7 @@ function GoodsChoose(props) {
                 title={item.name}
                 picture={item.mainImg}
                 itemDesc={item.subTitle}
+                price={item.price}
                 tag={false}
               />
             ))}

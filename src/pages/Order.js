@@ -7,6 +7,8 @@ import order from '../services/order'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Countdown from 'react-countdown'
+import toast, { Toaster } from 'react-hot-toast'
 
 function Order(props) {
   const history = useHistory()
@@ -25,11 +27,15 @@ function Order(props) {
   }, [])
 
   const alipay = () => {
+    const newOrderInfo = Object.assign(orderInfo, { status: 2, paymentType: 1 })
+    console.log(newOrderInfo)
+    order.updateOrder(orderInfo)
     const aliOrderInfo = {
       id: orderNo,
       price: orderInfo.payment,
       title: '订单支付',
     }
+
     order.postAlipay(aliOrderInfo).then((res) => {
       console.log(res)
       const newWindow = window.open('', '_blank')
@@ -39,22 +45,43 @@ function Order(props) {
     })
   }
 
+  const cancelOrder = () => {
+    if (window.confirm('确定取消订单吗？')) {
+      const newOrderInfo = Object.assign(orderInfo, { status: 0 })
+      console.log(newOrderInfo)
+      order.updateOrder(orderInfo).then((res) => {
+        if (res.success) {
+          toast.success('取消订单成功')
+          history.push('/home')
+        }
+      })
+    }
+  }
+
   return (
     <div className="w-full h-screen flex flex-col ">
       <Head />
       <Nav />
+      <Toaster />
       <div className="h-screen w-full flex py-4 px-16 bg-gray-50 space-x-4">
         <div className="w-2/3 flex flex-col space-y-4">
           <div className="flex flex-col py-2 px-4 shadow-md bg-white">
             <div className="relative flex justify-between">
               <div className="text-lg py-4">订单信息</div>
-              <div className="absolute right-1 bg-red-600 rounded-2xl text-white px-2 py-1 text-sm hover:bg-red-500 shadow-md cursor-pointer">
+              <div
+                className="absolute right-1 bg-red-600 rounded-2xl text-white px-2 py-1 text-sm hover:bg-red-500 shadow-md cursor-pointer"
+                onClick={cancelOrder}
+              >
                 取消订单
               </div>
             </div>
             <div className="flex flex-col text-gray-500 text-sm space-y-2">
               <div>订单号: {orderInfo.orderid}</div>
               <div>订单创建时间: {Date(orderInfo.createTime)}</div>
+              <div className="flex">
+                <div>支付剩余时间:</div>
+                <Countdown className="text-red-500" date={Date.now() + 600000} />
+              </div>
             </div>
           </div>
           <div className="flex flex-col py-2 px-4 shadow-md bg-white">

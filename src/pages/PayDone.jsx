@@ -59,7 +59,7 @@ function PayDone(props) {
           <TextField
             name="msg"
             id="outlined-multiline-flexible"
-            label="备注"
+            label="评论"
             multiline
             rows={4}
             // value={values.msg}
@@ -82,13 +82,12 @@ function PayDone(props) {
         {orderList.map((item) => {
           return (
             <div className="flex flex-col py-2 px-4 shadow-md bg-white" key={item.id}>
-              <div className="flex">
-                <div
-                  style={{ backgroundImage: `url(${imgRoot + item.mainImg})` }}
-                  className="w-20 h-20 bg-red-200 rounded-t-md bg-cover"
-                />
+              <div className="flex w-2/3">
+                <div className="w-20 h-20 bg-red-200 rounded-t-md bg-cover">
+                  <img className="w-full h-full object-cover " src={imgRoot + item.mainImg} alt="banner" />
+                </div>
 
-                <div className="flex flex-col text-gray-500 text-sm space-y-2 justify-center px-3">
+                <div className="flex flex-grow flex-col text-gray-500 text-sm space-y-2 justify-center px-3">
                   <div>商品名称: {item.name}</div>
                   <div>商品简介: {item.subTitle}</div>
                 </div>

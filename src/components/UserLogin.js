@@ -20,7 +20,13 @@ const UserLogin = () => {
 
   return (
     <div className="w-full h-full flex flex-col content-center bg-white rounded-md shadow-sm p-4 space-y-4">
-      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+      <LoginModal
+        isOpen={loginModalOpen}
+        onClose={() => {
+          setIsLogin(true)
+          setLoginModalOpen(false)
+        }}
+      />
       <div className="mx-auto">
         <FaUserCircle size={45} />
       </div>
